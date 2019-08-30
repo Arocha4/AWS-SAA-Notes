@@ -1,0 +1,9 @@
+CloudFormation
+
+Use of CFT, Beanstalk and Autoscaling are free but you pay for the AWS resources that these services create.
+
+Fn::GetAtt - values that you can use to return result for an AWS created resource or used to display in output
+
+By Default - rollback everything on error
+
+Infrastructure as a code, Version controlled, declarative and flexible
