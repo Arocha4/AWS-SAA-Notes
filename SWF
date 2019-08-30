@@ -1,0 +1,15 @@
+SWF - task oriented API
+
+Simple Work flow - human interaction to complete order or collection of services to complete a work order.
+
+Workers - interact with SWF to get task, process received task and return the result
+
+Deciders - program that co-ordinates the tasks, i.e. - ordering, concurrency and scheduling
+
+Workers and Deciders can run independently
+
+TASK is only assigned ONCE and NEVER DUPLICATED (key difference from SQS where messages can be processed multiple times)
+
+SWF Domain - think of it as a container for the work flow. you can register a domain by Console or API
+
+Maximum workflow processing time can 1 year (equivalent seconds) - SQS is 12 hours processing time
