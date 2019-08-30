@@ -1,0 +1,25 @@
+SQS - message oriented API
+
+SQS - Message can contain upto 256KB of text, billed at 64KB chunks,
+
+Single request can have 1 to 10 messages unto maximum of 256KB payload
+
+Even though there is one message of 256Kb its basically 4 request for billing since (4 * 64KB)
+
+NO ORDER - SQS messages can be delivered multiple times in any order
+
+Design - you can have 2 priority queues for priority based message one for higher and other for lower priority
+
+EC2 instances always poll for messages from the queue (pull from the queue and not push)
+
+Visibility timeout always start from when the application instance polled the message.
+
+Great design - Visibility timeout expires that means there is a failure somewhere since that message was polled but not processed and hence not deleted so other some other process will poll the message again and visibility timeout starts again.
+
+Visibility timeout by default is 30 Seconds up to 12 hour maximum (ChangeMessageVisibility) / maximum visibility
+
+Maximum long polling timeout 20 seconds (http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html) —ReceiveMessageWaitTimeSeconds
+
+Messages in the Queue can be retained for up to 14 days
+
+First 1 million request ares free, then $0.50 PER EVERY MILLION REQUESTS
