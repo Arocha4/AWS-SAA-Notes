@@ -1,0 +1,18 @@
+ElasticBeanstalk
+
+Its uses ASG,ELB,EC2,RDS,SNS and S3 to provision things.
+
+Environment Tier - Webserver, Worker
+
+Predefined Configurations - IIS, Node.JS, PHP, Python, Ruby, Tomcat, Go, .NET,
+
+preconfigured docker: Glassfish, Python or generic docker
+
+Environment URL - has to be unique
+
+Dashboard - Recent events, Monitor, Logs, Alarms, Upload and Deploy and Configurations
+
+Configuration - Scaling, Instances (DIRTMCG instance types, key pair), Notifications, Software configuration (e.g. PHP.ini), Networking tier (ELB, VPC config), Data tier(RDS)
+
+Environment properties (Access key and secret key as parameters)
+
