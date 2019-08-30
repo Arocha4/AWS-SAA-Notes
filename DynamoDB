@@ -1,0 +1,44 @@
+DynamoDB
+fast - flexible No sql database - single digit ms latency, fully managed, supports document and key-value (web, gaming, ad-tech, IOT)..
+Table, Item (row), attribute (key - value)
+Eventual Consistent Reads vs Strongly Consistent Reads
+Read Capacity Units, Write Capacity Units (can be scaled up) - push button scalability
+Writes are written to 3 different location / facilities/ datacenter (synchronous) - Amazon DynamoDB synchronously replicates data across three facilities in an AWS Region, giving you high availability and data durability.
+Two types of primary key -
+(1) Single Attribute (think unique id) - Partition Key (Hash Key) composted of 1 attribute (no nesting allowed here) - Partition key will help determine the physical location of data.
+(2) Composite key (think unique id and range) - Partition Key(Hash Key) & Sort Key (Range key - e.g date) - composed of 2 attributes - if two data have same partition key (same location) it must have a different sort key, and they will be stored together on single location.
+Secondary Indexes
+(1) Local Secondary Index - Same Partion Key + Different Sort Key ( can only be created while creating the table, cannot be added/removed or modified later)
+(2) Global Secondary Index - Different Partition Key + Different Sort Key ( can be created during the table creation or can be added later or removed / modified later)
+DynamoDB Streams
+use to capture any kinda modification to the dynamo db table, Lambda can capture events and push notifications thru SES
+Table can be exported to csv (either select all items )
+Query vs Scan
+Query operation finds item in a table using only primary key attribute values , must provide partition attribute name and the value to search for, you can optionally provide a sort key attribute name and value to refine search results (e.g. all the forums with this ID since last 7 days). By default Query returns all the data attributes for those items with specified primary keys. You can further use ProjectionExpression parameter to only return a selected attributes.
+Query results are always sorted by the sort key (ascending for both numbers and string by default). To reverse the sort order set the ScanIndexForward parameter to false
+By Default Queries are going to be Eventually consistent but can be changed to StronglyConsistent.
+Scan operation is basically examines every item - e.g. dumping the entire table, by default Scan returns all the data attributes but we could use ProjectionExpression parameter to only return a selected attributes.
+Query operation is more efficient than scan operation
+For quick response time design your table in a way that you can use Query Get or BatchGetItem API (read multiple items - can get upto 100 items or up to 1MB of data) ,
+Alternatively design your application to use scan operation in a way that minimize impact of your table’s request rate since it can use up the entire table’s provisioned throughput in a single scan operation
+DynamoDB Provisioned Throughput calculations
+Items == rows
+Read Provisioned Throughput
+All units are rounded up to 4KB increments
+Eventual Consistent reads (default) consist of 2 reads per second
+Strongly Consistent reads consist of 1 read per second
+( Size of Read Rounded to nearest 4KB Chunk / 4 KB * no of items ) / 2 <— if eventual consistency
+( Size of Read Rounded to nearest 4KB Chunk / 4 KB * no of items ) / 1 <— if strongly consistency
+Write Provisioned Throughput
+All units are rounded up to 1KB increments
+All writes consist of 1 write per second
+( Size of write in KB * no of items ) / 1
+When you exceed your maximum allowed provisioned throughput for a table or one or more global secondary index you will get 400 HTTP Status code - ProvisionedThroughputExceededException
+AssumeRolewithWebIdentity role
+Idempotent conditional write
+Atomic counters - always need to increment so its not idempotent
+if data is critical and no margin of error then must use Idempotent conditional write.
+http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html#limits-tables
+Only Tables(256 table per region) and ProvisionedThroughput(80 K read, 80K write per account for US east, 20K for other regions) limits can be increased
+http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/QueryAndScanGuidelines.html (Reduce Page Size for Scan operation and Isolate Scan Operation)
+
