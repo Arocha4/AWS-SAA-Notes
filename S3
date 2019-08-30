@@ -1,0 +1,104 @@
+S3
+
+secure, durable, highly scalable object store (1 byte to 5TB), universal namespace (must be unique bucket - regardless of regions),object based key value store, VersionID, Metadata, ACL
+
+The total volume of data and number of objects you can store are unlimited. Individual Amazon S3 objects can range in size from 1 byte to 5 terabytes. The largest object that can be uploaded in a single PUT is 5 gigabytes. For objects larger than 100 megabytes, customers should consider using the Multipart Upload capability. it mean the largest single file into S3 is 5G, but after the 5G files are in S3, they can be assembled into a 5T file,
+
+You can use a Multipart Upload for objects from 5 MB to 5 TB in size (Exam question, scenario where more than 5GB file needs to be uploaded)
+
+object based storage vs block based Storage (EFS)
+
+data is spread out in multiple facilities, you can loose two facilities and still have access to files
+
+For PUTS of New Objects (Read after Write Consistency), For Overwrite PUTS and DELETE (Eventual Consistency)
+
+http://docs.aws.amazon.com/general/latest/gr/awsservicelimits.html#limits_s3 ( Number of S3 bucket limit per account — 100)
+
+Storage Tiers/ Class
+
+S3 Standard - Durability (11 9s), Availability (99.99 %) - reliable regular for just about everything
+
+S3 IA (Infrequent Access) - Durability (11 9s), Availability (99.9 %) - accessed every 1 month to 6 months or so (infrequent) but rapid access and low retrieval time (few ms)
+
+S3 RRS(Reduced Redundant Storage)- Durability (99.99%), Availability (99.99 %) - less durability (data that can easily be regenerated - e.g thumbnails) - cheapest of all s3, less fault tolerant then the other two since you are willing to loose the data, reproducible data
+
+Glacier - for archival only (3 to 5 hours restore time)
+
+S3 price - charged for Storage, number of requests, data transfer (tiered so more you use less charge)
+
+bucket name has to be all lowercase letters
+
+S3 for static website hosting (Static Website Hosting > Enable website hosting) - no dynamic
+
+Any time you create a bucket nothing is publicly accessible / Any time you add an object to a bucket its private by default (you will get 403) > Make the files public (even for public hosting)
+
+every object inside the bucket can have different storage class (S3 standard, S3-IA, S3-RRS) and you can turn on server side encryption (AES - 256)
+
+regular bucket link: https://s3-eu-west-1.amazonaws.com/ankittest <— https
+
+bucket with Static website hosting: http://ankittestsite.s3-website-eu-west-1.amazonaws.com <— http (has to be for static hosting), you can turn it into SSL / https with cloudfront though
+
+CORS (CROSS ORIGIN RESOURCE SHARING) - to avoid the use of proxy
+
+Versioning - once enable you cannot disable versioning / although it can be suspend it , if you want to turn it off delete the bucket and recreate (version id)
+
+Once you delete the delete marker, you can get the file back that you have deleted while versioning on
+
+every version is stored separately in the bucket for each version / might not be a good choice for cost perspective for large media files., multiple updates use case also not ideal for versioning.
+
+Versioning’s MFA Delete Capability can be used to provide additional layer of security.
+
+Cross Region Replication - (requires versioning enabled on source and destination buckets)
+
+you can enable - need source and destination bucket (create a new bucket, source bucket will not show up on drop down of destination)
+
+Existing objects will not be replicated, only new objects will be replicated across the region
+
+Lifecycle management in S3
+
+(1) when versioning is disabled
+
+Transition to IA S3 - min 30 days and has a 128KB minimum of object size
+
+Archive to Glacier - min 1 day if IA is not checked, min 60 day if Transition to IA S3 is checked
+
+Permanently Delete - min 2 day if IA is not checked and 1 is selected for Glacier, min 61 day if IA is selected 30, Glacier is selected 60.
+
+(2) when versioning is enabled you have lifecycle management options to take action on previous version as well as current version.
+
+Security and Encryption in S3
+
+by default newly created buckets are private
+
+Access control using Bucket Policies (entire bucket) and ACL(individual objects and folders)
+
+access logs - all the request made to S3 buckets, to another bucket or another account’s S3 bucket
+
+Encryption
+
+(1) In Transit - SSL / TLS
+
+(2) Data at rest
+
+Server Side Encryption
+
+SSE- S3 Server Side Encryption with S3 managed keys, (amazon AES 256 handled for you) - click on the object and encrypt
+
+SSE - KMS - AWS Key management services , managed keys - additional charges / audit trail of keys, amazon manage keys
+
+SSE - C - Server side encryption with Customer provided keys - you manage encryption keys
+
+Client Side Encryption
+
+you encrypt the data on client side and upload to s3
+Every non-anonymous request to S3 must contain authentication information to establish the identity of the principal making the request. In REST, this is done by first putting the headers in a canonical format, then signing the headers using your AWS Secret Access Key.
+
+You can insert a presigned url into a webpage to download private data directly from S3.
+
+The object creation REST APIs (see Specifying Server-Side Encryption Using the REST API) provide a request header, x-amz-server-side-encryption that you can use to request server-side encryption.
+
+S3 Transfer Acceleration
+
+Utilize local edge locations to upload content to S3 - incur extra cost
+
+further away you are the more benefit you get (faster)
