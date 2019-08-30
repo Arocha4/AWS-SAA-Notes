@@ -1,0 +1,41 @@
+SNS
+
+works on a publish - subscribe model, SNS notifies the message, and hence push based approach. Inexpensive pay as you go
+
+CloudWatch or Autoscaling triggers SNS
+
+SNS can notify to Email, Text / SMS, SQS or any HTTP end point.
+
+protocols: HTTP, HTTPS, EMAIL, EMAIL-JSON, SQS or Application - messages can be customized for each protocol
+
+SNS messages are stored redundantly to multiple AZs
+
+SNS Dataformat - JSON (Subject, Message, TopicArn, MessageId, unsubscribeURL etc..)
+
+$0.50 per 1 million SNS request
+
+Different price for different recipient types
+
+to HTTP: $0.06 / 100,000 notifications deliveries
+
+to EMAIL: $2 / 100,000 notifications deliveries
+
+to SMS: $0.75 / 100 notifications deliveries
+
+http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-devicetoken.html (CreatePlatformEndpoint API)
+
+SWF - task oriented API
+
+Simple Work flow - human interaction to complete order or collection of services to complete a work order.
+
+Workers - interact with SWF to get task, process received task and return the result
+
+Deciders - program that co-ordinates the tasks, i.e. - ordering, concurrency and scheduling
+
+Workers and Deciders can run independently
+
+TASK is only assigned ONCE and NEVER DUPLICATED (key difference from SQS where messages can be processed multiple times)
+
+SWF Domain - think of it as a container for the work flow. you can register a domain by Console or API
+
+Maximum workflow processing time can 1 year (equivalent seconds) - SQS is 12 hours processing time
