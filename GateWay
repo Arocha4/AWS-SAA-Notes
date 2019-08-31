@@ -1,0 +1,13 @@
+(1) Gateway stored volumes - entire dataset is stored onsite and asynchronously backed up to S3
+
+(2) Gateway cached volumes - Most frequently used data is stored onsite and entire dataset is stored on S3
+
+(3) Gateway Virtual Taped library - Used for backup if you don’t want to use Tapes, like Netbackups etc..
+
+Import Export
+
+Import / Export Disk
+
+Import to S3, EBS, Glacier
+
+export from S3
