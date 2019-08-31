@@ -1,0 +1,73 @@
+Content Delivery Network - edge locations, reduced latency, traffic serves from the closest nodes
+
+Edge locations - content will be cached (over 50), different from region / AZ. TTL (speed of image // media is quicker - first user suffers the performance), can be not only read only (you can write it)
+
+Origin can be - S3, EC2, ELB, Route53 also NON AWS origin server ,
+
+Distribution - name given to the CDN consist of collection of Edge locations
+
+(1) Web Distribution -
+
+(2) RTMP (media streaming / flash) Distribution - for Adobe flash files only
+
+you can have multiple origins of a distribution
+
+Path Pattern (*)
+
+Restrict viewer access by signed URL or Signed Cookies
+
+Restrict content based on geo location (whitelist and blacklist)
+
+Create invalidate - invalidate TTL (you pay for it) like purge in Akamai
+
+VPC - logical datacenters in AWS
+
+Can span multiple AZ, but can’t span multiple regions, PEER VPC, but no Transitive Peering
+
+Custom VPC has to be /16 can’t go higher then that /8 is not allowed
+
+When you create Custom VPC it creates default security group, default network ACL and default route table., it doesn’t create default Subnet
+
+One Subnet == one AZ, you can have security group spanning multiple AZ, ACL’s span across AZ (assign sg and ACL to two different subnets)
+
+any CIDR block 5 reserved IPs (.0, .1, .2, .3, .255)
+
+so for CIRD block /24: 2^8 - 5 = 256 - 5 = 251 available IP address space
+
+when you create internet gateway, by default its detached, attach it to VPC then, only 1 IGW per VPC
+
+When you create a VPC Default Routetable(Main Routable) is created where the default Routes are,
+
+10.0.0.0/16 Local <— all subnets inside VPC will be able to talk to each other
+
+Don’t touch Main route table
+
+Create another routetable for route out to internet (0.0.0.0/0 IGW) <— route out to the internet
+
+Last thing you associate this new route table to one of the subnet which will make it public. (you can enable auto assign public IP for the public subnet)
+
+1 subnet can have 1 routetable
+
+ICMP is for ping / monitor
+
+NAT instance and NAT gateway
+
+NAT Instance - disable source / destination check., always behind security group, must be in public subnet, must have an EIP, ,must be a route out of the private subnet to NAT
+
+Increase the instance size if bottleneck
+
+Change the main route table - add a route (0.0.0.0/0 NAT Instance target)
+
+NAT Instance is a single point of failover (put it behind a ASG),
+
+NAT gateway - released in 2016 - amazon handled
+
+Amazon maintains it for you, no need to handle yourself. (security patches applied by AWS)
+
+You can just create the gateway and assign EIP (put it in public subnet) (automatically assigned)
+
+Change the main route table - add a route (0.0.0.0/0 NAT gateway target)
+
+No need for disable source/destination check or no need to put it behind a security group - it handles it for you.
+
+Highly available / redundancy no need for ASG.NAT gateways are little bit costly - always use it in production scale automatically up to 10Gbps
