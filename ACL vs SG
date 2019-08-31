@@ -1,0 +1,27 @@
+Security groups are statefull - any inbound rule , applies to outbound as well (Only Allow rules)
+
+by default all inbound deny, all outbound allow
+
+can span across AZ
+
+ACL are stateless -
+
+For default ACL, all inbound and outbound rules are allowed by default - associated with all subnets in VPC by default
+
+for Custom ACL, all inbound and outbound traffic is denied by default - not associated with any subnet
+
+1 subnet is only associated with ACL. granular rules for ACLs, numbered rules (recommended steps of 100)
+
+rule no. 99 takes precedence over rule no. 100 (if 99 is blocked and 100 is allowed) 99 will be executed.
+
+Can SPAN across AZ
+
+Ephemeral port - 1024 - 65535 should be allowed to take traffic.
+
+if you want to BLOCK IP address then must use ACL, because security group doesn’t have deny
+
+Bastion - keep it in public subnet to allow SSH / RDP into instances into private subnets (High availability - Bation in two public subnets and also ASG - Route 53 running Health checks on those Bastion)
+
+VPC Flowlogs: to capture all the traffic information into logs - logs everything (create IAM role and create cloud watch log group - and log stream)
+
+VPC Cleanup: can’t delete VPC if you have active running instance or ELB is running
